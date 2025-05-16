@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="SWPF.GameDevTool.MAIN.Views.LobbyPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SWPF.GameDevTool.MAIN.Views"
+             mc:Ignorable="d" 
+             Width="400" Height="400">
+    <Grid x:Name="gdMain" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="로비 영역" HorizontalAlignment="Center" Margin="0,10" />
+        <Grid x:Name="gdMainMenu"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Margin="10"
+              Width="Auto" />
+    </Grid>
+</UserControl>

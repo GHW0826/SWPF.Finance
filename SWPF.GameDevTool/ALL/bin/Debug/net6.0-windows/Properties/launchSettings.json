@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ALL": {
+      "commandName": "Executable",
+      "executablePath": "D:\\git\\SWPF.GameDevTool\\SWPF.GameDevTool\\ALL\\bin\\Debug\\net6.0-windows\\SWPF.GameDevTool.exe"
+    }
+  }
+}
