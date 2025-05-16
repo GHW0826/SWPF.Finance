@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+	<ProjectReference Include="..\..\SWPF.Common\SWPF.Common\SWPF.Common.csproj">
+	  <Name>SWPF.Finance.Common</Name>
+	</ProjectReference>
+    <ProjectReference Include="..\SWPF.Finance.MAIN\SWPF.Finance.MAIN.csproj">
+      <Name>SWPF.Finance.MAIN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWPF.Finance.MAP\SWPF.Finance.MAP.csproj">
+      <Name>SWPF.Finance.MAP</Name>
+    </ProjectReference>
+	<ProjectReference Include="..\SWPF.Finance.TEST\SWPF.Finance.TEST.csproj">
+       <Name>SWPF.Finance.TEST</Name>
+	</ProjectReference>
+
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\launchSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
