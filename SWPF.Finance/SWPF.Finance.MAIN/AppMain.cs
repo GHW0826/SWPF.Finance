@@ -1,4 +1,4 @@
-﻿using SWPF.GameDevTool.MAIN.Views;
+﻿using SWPF.Finance.MAIN.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SWPF.GameDevTool.MAIN
+namespace SWPF.Finance.MAIN
 {
     public class AppMain 
     {
@@ -44,8 +44,8 @@ namespace SWPF.GameDevTool.MAIN
         /// <returns>생성된 인스턴스</returns>
         public static T CreateInstance<T>(string appSubName, string className)
         {
-            string assemblyUrl = string.Format("SWPF.GameDevTool.{0}.DLL", appSubName);
-            string typeName = string.Format("SWPF.GameDevTool.{0}.{1}", appSubName, className);
+            string assemblyUrl = string.Format("SWPF.Finance.{0}.DLL", appSubName);
+            string typeName = string.Format("SWPF.Finance.{0}.{1}", appSubName, className);
 
             Uri uri = new Uri(assemblyUrl, UriKind.RelativeOrAbsolute);
             // 상대 경로라면 절대 경로로 바꾼다.

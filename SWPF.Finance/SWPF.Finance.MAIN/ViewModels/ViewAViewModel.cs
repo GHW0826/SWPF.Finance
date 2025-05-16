@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWPF.GameDevTool.MAIN.ViewModels
+namespace SWPF.Finance.MAIN.ViewModels
 {
     public class ViewAViewModel : BindableBase
     {

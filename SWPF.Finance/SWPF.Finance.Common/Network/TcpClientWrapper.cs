@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWPF.GameDevTool.Common.Network
+namespace SWPF.Finance.Common.Network
 {
     public class TcpClientWrapper : INetworkClient
     {

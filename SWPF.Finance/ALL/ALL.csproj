@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
@@ -21,12 +22,6 @@
     <ProjectReference Include="..\SWPF.Finance.MAIN\SWPF.Finance.MAIN.csproj">
       <Name>SWPF.Finance.MAIN</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SWPF.Finance.MAP\SWPF.Finance.MAP.csproj">
-      <Name>SWPF.Finance.MAP</Name>
-    </ProjectReference>
-	<ProjectReference Include="..\SWPF.Finance.TEST\SWPF.Finance.TEST.csproj">
-       <Name>SWPF.Finance.TEST</Name>
-	</ProjectReference>
 
     <None Update="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

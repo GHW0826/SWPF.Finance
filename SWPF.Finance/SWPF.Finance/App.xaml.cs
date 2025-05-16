@@ -8,7 +8,7 @@ namespace SWPF.GameDevTool
     {
         protected override Window CreateShell()
         {
-            Activator.CreateInstanceFrom(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SWPF.GameDevTool.MAIN.DLL"), "SWPF.GameDevTool.MAIN.AppMain");
+            Activator.CreateInstanceFrom(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SWPF.Finance.MAIN.DLL"), "SWPF.Finance.MAIN.AppMain");
             return null; // return Container.Resolve<MainWindow>();
         }
 

@@ -10,7 +10,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.Common", "SWPF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.MAIN", "SWPF.Finance\SWPF.Finance.MAIN\SWPF.Finance.MAIN.csproj", "{34514D4E-A159-40F0-8570-A792C58B2C62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.GameDevTool.TEST", "SWPF.Finance\SWPF.Finance.TEST\SWPF.GameDevTool.TEST.csproj", "{6AF3C11E-21D1-43B8-A80C-F1D1C04A66B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Common", "SWPF.Common\SWPF.Common\SWPF.Common.csproj", "{C33FB3FA-F4BE-4791-B895-B069A08F10E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.TEST", "SWPF.Finance\SWPF.Finance.TEST\SWPF.Finance.TEST.csproj", "{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.CryptoTrade", "SWPF.Finance.CryptoTrade\SWPF.Finance.CryptoTrade.csproj", "{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.StockTrade", "SWPF.Finance.StockTrade\SWPF.Finance.StockTrade.csproj", "{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +40,22 @@ Global
 		{34514D4E-A159-40F0-8570-A792C58B2C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34514D4E-A159-40F0-8570-A792C58B2C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34514D4E-A159-40F0-8570-A792C58B2C62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6AF3C11E-21D1-43B8-A80C-F1D1C04A66B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6AF3C11E-21D1-43B8-A80C-F1D1C04A66B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6AF3C11E-21D1-43B8-A80C-F1D1C04A66B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6AF3C11E-21D1-43B8-A80C-F1D1C04A66B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C33FB3FA-F4BE-4791-B895-B069A08F10E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C33FB3FA-F4BE-4791-B895-B069A08F10E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C33FB3FA-F4BE-4791-B895-B069A08F10E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C33FB3FA-F4BE-4791-B895-B069A08F10E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

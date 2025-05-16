@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SWPF.GameDevTool.MAIN.Views
+namespace SWPF.Finance.MAIN.Views
 {
     public partial class MainWindow : WindowBase
     {

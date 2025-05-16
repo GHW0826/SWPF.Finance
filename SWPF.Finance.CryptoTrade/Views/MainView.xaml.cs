@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SWPF.Finance.MAIN.Views
+namespace SWPF.Finance.CryptoTrade.Views
 {
     /// <summary>
-    /// LoginPanel.xaml에 대한 상호 작용 논리
+    /// Main.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class LoginPanel : UserControl
+    public partial class MainView : UserControl
     {
-        public LoginPanel()
+        public MainView()
         {
             InitializeComponent();
         }

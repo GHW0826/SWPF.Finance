@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SWPF.GameDevTool.MAIN.Views
+namespace SWPF.Finance.MAIN.Views
 {
     /// <summary>
     /// LobbyPanel.xaml에 대한 상호 작용 논리

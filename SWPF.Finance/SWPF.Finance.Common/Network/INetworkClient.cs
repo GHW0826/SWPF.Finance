@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWPF.GameDevTool.Common.Network
+namespace SWPF.Finance.Common.Network
 {
     public interface INetworkClient
     {
