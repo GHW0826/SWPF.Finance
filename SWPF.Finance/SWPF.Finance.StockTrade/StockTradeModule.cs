@@ -1,6 +1,4 @@
-﻿using Prism.Ioc;
-using Prism.Modularity;
-using SWPF.Finance.StockTrade.ViewModels;
+﻿using SWPF.Finance.StockTrade.ViewModels;
 using SWPF.Finance.StockTrade.Views;
 
 namespace Module1

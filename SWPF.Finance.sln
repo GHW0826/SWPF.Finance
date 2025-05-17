@@ -2,21 +2,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35617.110
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALL", "SWPF.Finance\ALL\ALL.csproj", "{ED05A4D8-EC3B-486C-AF6A-AEEEF1FCE218}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance", "SWPF.Finance\SWPF.Finance\SWPF.Finance.csproj", "{85E30D96-1D7E-43B9-A242-FAA6893F50A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.Common", "SWPF.Finance\SWPF.Finance.Common\SWPF.Finance.Common.csproj", "{F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.MAIN", "SWPF.Finance\SWPF.Finance.MAIN\SWPF.Finance.MAIN.csproj", "{34514D4E-A159-40F0-8570-A792C58B2C62}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF} = {F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Common", "SWPF.Common\SWPF.Common\SWPF.Common.csproj", "{C33FB3FA-F4BE-4791-B895-B069A08F10E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.TEST", "SWPF.Finance\SWPF.Finance.TEST\SWPF.Finance.TEST.csproj", "{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF} = {F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.CryptoTrade", "SWPF.Finance.CryptoTrade\SWPF.Finance.CryptoTrade.csproj", "{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.CryptoTrade", "SWPF.Finance\SWPF.Finance.CryptoTrade\SWPF.Finance.CryptoTrade.csproj", "{BFF01F7D-68A0-4EC4-81A2-FB891703A36C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.StockTrade", "SWPF.Finance.StockTrade\SWPF.Finance.StockTrade.csproj", "{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.StockTrade", "SWPF.Finance\SWPF.Finance.StockTrade\SWPF.Finance.StockTrade.csproj", "{07EAFC40-EDDF-4BF6-976E-18EE1F8C1423}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C33FB3FA-F4BE-4791-B895-B069A08F10E1} = {C33FB3FA-F4BE-4791-B895-B069A08F10E1}
+		{F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF} = {F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALL", "SWPF.Finance\ALL\ALL.csproj", "{7A7FF792-3715-4FBE-A660-56EADF38DD11}"
+	ProjectSection(ProjectDependencies) = postProject
+		{85E30D96-1D7E-43B9-A242-FAA6893F50A7} = {85E30D96-1D7E-43B9-A242-FAA6893F50A7}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +37,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ED05A4D8-EC3B-486C-AF6A-AEEEF1FCE218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED05A4D8-EC3B-486C-AF6A-AEEEF1FCE218}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED05A4D8-EC3B-486C-AF6A-AEEEF1FCE218}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED05A4D8-EC3B-486C-AF6A-AEEEF1FCE218}.Release|Any CPU.Build.0 = Release|Any CPU
 		{85E30D96-1D7E-43B9-A242-FAA6893F50A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{85E30D96-1D7E-43B9-A242-FAA6893F50A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85E30D96-1D7E-43B9-A242-FAA6893F50A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,14 +57,18 @@ Global
 		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7083E5AF-67F5-4A4F-B088-DCC32401B5CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED7F1A36-576C-4E7B-9A76-F4382E7E8646}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8311075-8F2F-4B83-8FA0-DE16F8D623E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF01F7D-68A0-4EC4-81A2-FB891703A36C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF01F7D-68A0-4EC4-81A2-FB891703A36C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF01F7D-68A0-4EC4-81A2-FB891703A36C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF01F7D-68A0-4EC4-81A2-FB891703A36C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07EAFC40-EDDF-4BF6-976E-18EE1F8C1423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07EAFC40-EDDF-4BF6-976E-18EE1F8C1423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07EAFC40-EDDF-4BF6-976E-18EE1F8C1423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07EAFC40-EDDF-4BF6-976E-18EE1F8C1423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A7FF792-3715-4FBE-A660-56EADF38DD11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A7FF792-3715-4FBE-A660-56EADF38DD11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A7FF792-3715-4FBE-A660-56EADF38DD11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A7FF792-3715-4FBE-A660-56EADF38DD11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,8 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
-using SWPF.GameDevTool.TEST.ViewModels;
-using SWPF.GameDevTool.TEST.Views;
-
+using SWPF.Finance.TEST.ViewModels;
+using SWPF.Finance.TEST.Views;
 namespace Module1
 {
     public class TESTModule : IModule

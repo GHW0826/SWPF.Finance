@@ -1,5 +1,6 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
+using Prism.Regions;
 using SWPF.Finance.CryptoTrade.ViewModels;
 using SWPF.Finance.CryptoTrade.Views;
 

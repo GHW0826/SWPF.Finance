@@ -43,9 +43,7 @@ namespace SWPF.Finance.MAIN.Views
             // 앱 정보 리스트
             var apps = new[]
             {
-                new { Title = "Map", Tag = "MAP" },
-                new { Title = "Skill", Tag = "SKILL" },
-                new { Title = "Editor", Tag = "EDITOR" },
+                new { Title = "CryptoTrade", Tag = "CryptoTrade" },
                 new { Title = "TEST", Tag = "TEST" },
             };
 
