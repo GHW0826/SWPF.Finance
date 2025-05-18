@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Windows;
+using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Modularity;
+using SWPF.Finance.CryptoTrade;
 
 namespace SWPF.GameDevTool
 {
-    public partial class App
+    public partial class App : PrismApplication
     {
         protected override Window CreateShell()
         {
@@ -14,6 +17,12 @@ namespace SWPF.GameDevTool
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            // CryptoTrade 모듈 자동 등록
+            moduleCatalog.AddModule<CryptoTradeModule>();
         }
     }
 }

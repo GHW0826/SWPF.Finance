@@ -54,8 +54,8 @@ namespace SWPF.Finance.MAIN.Views
                 string toolType = sysMenuMsg as string;
 
                 Window childWindow = DynamicLoader.CreateInstance<Window>(toolType /* sysMenuMsg.MenuExecCd */, "MainWindow");
-                childWindow.Width = 400;
-                childWindow.Height = 400;
+                childWindow.Height = 600;
+                childWindow.Width = 1024;
                 if (childWindow == null)
                     return null;
 

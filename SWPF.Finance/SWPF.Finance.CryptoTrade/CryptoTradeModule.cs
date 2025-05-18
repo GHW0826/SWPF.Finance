@@ -4,22 +4,19 @@ using Prism.Regions;
 using SWPF.Finance.CryptoTrade.ViewModels;
 using SWPF.Finance.CryptoTrade.Views;
 
-namespace Module1
+namespace SWPF.Finance.CryptoTrade
 {
     public class CryptoTradeModule : IModule
     {
-        private readonly IRegionManager _regionManager;
+        private IRegionManager _regionManager;
 
-        public CryptoTradeModule(IRegionManager regionManager)
-        {
-            _regionManager = regionManager;
-        }
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            // Navigation용으로 View 등록
+            _regionManager = containerProvider.Resolve<IRegionManager>();
             _regionManager.RegisterViewWithRegion("ContentRegion", typeof(MainView));
         }
+
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {

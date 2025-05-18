@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35617.110
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance", "SWPF.Finance\SWPF.Finance\SWPF.Finance.csproj", "{85E30D96-1D7E-43B9-A242-FAA6893F50A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BFF01F7D-68A0-4EC4-81A2-FB891703A36C} = {BFF01F7D-68A0-4EC4-81A2-FB891703A36C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWPF.Finance.Common", "SWPF.Finance\SWPF.Finance.Common\SWPF.Finance.Common.csproj", "{F2DE3202-8C5C-40C7-89EA-7171D4E2DFCF}"
 EndProject
