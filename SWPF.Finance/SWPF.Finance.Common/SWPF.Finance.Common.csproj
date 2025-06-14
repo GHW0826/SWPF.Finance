@@ -8,4 +8,9 @@
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc5.4" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SWPF.Common\SWPF.Common\SWPF.Common.csproj">
+      <Name>SWPF.Finance.MAIN</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

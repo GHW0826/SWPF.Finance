@@ -1,4 +1,5 @@
-﻿using SWPF.Common.Base;
+﻿using Prism.Regions;
+using SWPF.Common.Base;
 using SWPF.Common.Converters;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,20 @@ namespace SWPF.Finance.MAIN.Views
 {
     public partial class MainWindow : WindowBase
     {
+        private readonly IRegionManager _regionManager;
+
+
         public bool _isTextVisible;
         public bool IsTextVisible {get; set;}
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+        public MainWindow(IRegionManager regionManager)
+        {
+            InitializeComponent();
+            _regionManager = regionManager;
         }
 
         void appBtn_Click(object sender, EventArgs e)

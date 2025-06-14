@@ -24,5 +24,13 @@ namespace SWPF.Finance.MAIN.Views
         {
             InitializeComponent();
         }
+
+                private void PasswordBox_PasswordChanged(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.LoginPanelViewModel vm)
+            {
+                vm.Password = ((PasswordBox)sender).Password;
+            }
+        }
     }
 }

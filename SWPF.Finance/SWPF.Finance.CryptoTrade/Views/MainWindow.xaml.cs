@@ -20,10 +20,5 @@ namespace SWPF.Finance.CryptoTrade
             InitializeComponent();
             _regionManager = regionManager;
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-     
-        }
     }
 }

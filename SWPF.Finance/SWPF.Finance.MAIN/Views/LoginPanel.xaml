@@ -6,7 +6,16 @@
              xmlns:local="clr-namespace:SWPF.Finance.MAIN.Views"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400">
-    <Grid x:Name="gdMain">
-            
+    <Grid x:Name="gdMain" HorizontalAlignment="Center">
+        <StackPanel x:Name="spLogin" HorizontalAlignment="Center" VerticalAlignment="Top" Width="169">
+            <TextBox x:Name="tbClientId"/>
+            <PasswordBox x:Name="pbPwd"/>
+
+            <StackPanel>
+                <Button x:Name="btnSetup" Content="Setup" Command="{Binding SetupCommand}" Margin="4,0,4,0"/>
+                <Button x:Name="btnLogin" Content="Login" Command="{Binding LoginCommand}" Margin="4,0,4,0"/>
+                <Button x:Name="btnExit" Content="Exit" Command="{Binding ExitCommand}" Margin="4,0,4,0"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>
