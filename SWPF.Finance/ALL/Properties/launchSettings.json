@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "프로필 1": {
-      "commandName": "Executable",
-      "executablePath": "D:\\git\\SWPF.Finance\\SWPF.Finance\\ALL\\bin\\Debug\\net9.0-windows10.0.17763.0\\SWPF.Finance.exe"
-    }
-  }
-}

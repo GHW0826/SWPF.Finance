@@ -1,0 +1,38 @@
+﻿<base:WindowBase x:Class="SWPF.Finance.Common.HostWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SWPF.Finance.Common"
+        xmlns:base="clr-namespace:SWPF.Common.Base;assembly=SWPF.Common"
+        
+        mc:Ignorable="d"
+        Title="HostWindow" Height="450" Width="800"
+        
+        FontWeight="Normal"
+        FontSize="12"
+        FocusVisualStyle="{x:Null}"
+        SnapsToDevicePixels="True"
+        
+        ResizeMode="NoResize"
+        Background="{x:Null}"
+        ShowInTaskbar="True"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        x:Name="hwMain"
+>
+    <!--
+    <Border x:Name="bdWindow" BorderBrush="Black" BorderThickness="0" Background="{DynamicResource HostWindowBorderBackground}" CornerRadius="5">
+    <DockPanel>
+        <Border x:Name="bdTop" Background="Transparent" BorderThickness="1" DockPanel.Dock="Top" Height="30" VerticalAlignment="Top" HorizontalAlignment="Stretch" MouseLeftButtonDown="bdTop_MouseLeftButtonDown">
+            <DockPanel>
+                <Label x:Name="lbTitle" Foreground="{DynamicResource HostWindowBorderForeground}" Margin="5,0,0,0" Content="{Binding Path=Title, ElementName=hwMain}"/>
+                <Button x:Name="btnClose" DockPanel.Dock="Right" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btnClose_Click" Style="{DynamicResource HostWindowCloseBtnStyle}"/>
+            </DockPanel>
+        </Border>
+        <Border x:Name="bdCenter" BorderBrush="#FF373737" BorderThickness="0" HorizontalAlignment="Stretch" Margin="5,0,5,5" Background="WhiteSmoke"/>
+    </DockPanel>
+    </Border>
+    -->
+</base:WindowBase>

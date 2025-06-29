@@ -1,9 +1,5 @@
 ﻿using SWPF.Common.Network.Http;
-using SWPF.Finance.MAIN.Dto.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using SWPF.Finance.Common.Contracts.Auth;
 using System.Threading.Tasks;
 
 namespace SWPF.Finance.Common.Service.Auth
@@ -24,7 +20,8 @@ namespace SWPF.Finance.Common.Service.Auth
 
         public Task<SignInResponse> SignInAsync(SignInRequest request)
         {
-            return _httpClient.PostAsync<SignInRequest, SignInResponse>("/auth/signin", request);
+            var result = _httpClient.PostAsync<SignInRequest, SignInResponse>("/auth/signin", request);
+            return result;
         }
     }
 }

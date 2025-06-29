@@ -1,0 +1,656 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+
+using ITS.Symphony.Common;
+using ITS.Symphony.Common.Net;
+using ITS.Symphony.Common.Popup;
+using ITS.Symphony.Controls;
+using ITS.Symphony.Entity;
+using ITS.Symphony.UI.PR.Common;
+using ITS.Symphony.UI.PR.Common.Controls;
+using ITS.Symphony.UI.PR.FI.NTS;
+using ITS.Symphony.Xml;
+
+using Microsoft.Windows.Design;
+
+namespace ITS.Symphony.UI.PR.FI
+{
+    /// <summary>
+    /// FI_FWD_BOND_MAIN_NewEdit.xaml에 대한 상호 작용 논리
+    /// </summary>
+    [ToolboxBrowsable(false)]
+    public partial class FI_FWD_BFD_MAIN_NewEdit : TSUserControlBase, IProdMain
+    {
+        public event PreviewSaveClickEventHandler PreviewSaveClick;
+
+        private bool m_bIsUPIGenerateCall = false;
+
+        #region Constructor
+
+        public FI_FWD_BFD_MAIN_NewEdit()
+        {
+            InitializeComponent();
+
+            // Enum의 한글 텍스트와 영문 텍스트 길이가 너무 차이가 나서 LanguageType에 따라 콤보박스 길이 제어 추가
+            if (Global.SystemData.LanguageType == "KOR") {
+                this.xceBondType.Width = 110;
+            } else { // ENG
+                this.xceBondType.Width = 190;
+            }
+
+            this.InstProfileChanged += (value) => {
+                // ProductSect 에 따라 상품명 Label 을 변경
+                if (value.instItem != null) {
+                    if (value.instItem.ProductSect == "P") {
+                        this.tbInstrument.Text = "Product";
+                    } else if (value.instItem.ProductSect == "I") {
+                        this.tbInstrument.Text = "Instrument";
+                    } else if (value.instItem.ProductSect == "T") {
+                        this.tbInstrument.Text = "Template";
+                    } else {
+                        this.tbInstrument.Text = "Instrument";
+                    }
+                }
+            };
+        }
+        private TabItem tabItem1;
+        private TabItem tabItem2;
+        private TabItem tabItem3;
+        private TabItem tabItem4;
+        private TabItem tabItem5;
+
+        #endregion
+
+
+        #region Method - Initialize
+
+        protected override void BeginInitializeUserControl()
+        {
+            base.BeginInitializeUserControl();
+
+            switch (OperationMode) {
+                case OperationMode.NewBlank:
+                    var mFiFwdBondMsg = new FiFwdBondMsg();
+                    Util.InitializeEntity(mFiFwdBondMsg);
+                    mFiFwdBondMsg.Instrument.AssetGrp = this.InstCategItem.AssetGrp;
+                    mFiFwdBondMsg.Instrument.InstGrp = this.InstCategItem.InstGrp;
+                    mFiFwdBondMsg.Instrument.PayoffPattern = this.InstCategItem.PayoffPattern;
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.EffectDate = Util.GetTodayString();
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.ExpiryDate = Util.GetTodayString();
+                    mFiFwdBondMsg.FiFwdSchedule.SettleSect = this.xceSettleSect.Initialize();
+                    mFiFwdBondMsg.FiFwdSchedule.SettleDateInfo.Lags = 2;
+                    mFiFwdBondMsg.FiFwdBondType = "FC"; // 다른 유형 개발될 때까지 FC(Fixed Coupon)로 고정 (EnumId: 1150)
+                    this.DataContext = mFiFwdBondMsg;
+                    break;
+
+                case OperationMode.NewTemplate:
+                    ProdOpenMsg mProdOpenMsg = new ProdOpenMsg() { InstId = this.InstItem.InstId };
+                    base.requestClientArea = (new SspAccess()).SendMessage<ProdOpenMsg>(6213, mProdOpenMsg, typeof(FiFwdBondMsg), this);
+                    break;
+
+                case OperationMode.Edit:
+                case OperationMode.SaveAs:
+                case OperationMode.SaveAsTemplate:
+                    FiFwdBondMsg mFwdBondMsg = base.SspMessageSender.GetMessageEntity<FiFwdBondMsg>(new FiFwdBondMsg());
+                    this.DataContext = (new SspMsgMarshaller()).CopyEntity<FiFwdBondMsg>(mFwdBondMsg);
+
+                    // Correction 처리시 Edit화면 Save Button제어 추가
+                    this.btnSave.Visibility = this.SaveBtnIsHide(mFwdBondMsg.Instrument.LinkedYN, mFwdBondMsg.Instrument.EditableYN);
+                    break;
+            }
+        }
+
+        protected override void InitializeDataContext()
+        {
+            base.InitializeDataContext();
+
+            this.xceNotionCcy.ItemsSource = PRUtil.GetCcyList();
+
+            FiFwdBondMsg mFiFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            if (mFiFwdBondMsg == null) {
+                return;
+            }
+
+            this.tabItem1 = new TabItem();
+            tabItem1.Name = "tabItem1";
+            this.RegisterName(tabItem1.Name, tabItem1);
+            tabItem1.SetResourceReference(TemplateProperty, "TsNeMainTiTemplate");
+            tabItem1.Visibility = Visibility.Collapsed;
+            this.tcMain.Items.Add(tabItem1);
+
+            this.tabItem2 = new TabItem();
+            tabItem2.Name = "tabItem2";
+            this.RegisterName(tabItem2.Name, tabItem2);
+            tabItem2.SetResourceReference(TemplateProperty, "TsNeMainTiTemplate");
+            tabItem2.Visibility = Visibility.Collapsed;
+            this.tcMain.Items.Add(tabItem2);
+
+            this.tabItem3 = new TabItem();
+            tabItem3.Name = "tabItem3";
+            this.RegisterName(tabItem3.Name, tabItem3);
+            tabItem3.SetResourceReference(TemplateProperty, "TsNeMainTiTemplate");
+            tabItem3.Visibility = Visibility.Collapsed;
+            this.tcMain.Items.Add(tabItem3);
+
+            this.tabItem4 = new TabItem();
+            tabItem4.Name = "tabItem4";
+            this.RegisterName(tabItem4.Name, tabItem4);
+            tabItem4.SetResourceReference(TemplateProperty, "TsNeMainTiTemplate");
+            tabItem4.Visibility = Visibility.Collapsed;
+            this.tcMain.Items.Add(tabItem4);
+
+            this.tabItem5 = new TabItem();
+            tabItem5.Name = "tabItem5";
+            this.RegisterName(tabItem5.Name, tabItem5);
+            tabItem5.SetResourceReference(TemplateProperty, "TsNeMainTiTemplate");
+            tabItem5.Visibility = Visibility.Collapsed;
+            this.tcMain.Items.Add(tabItem5);
+
+            switch (OperationMode) {
+                case OperationMode.NewBlank:
+                    mFiFwdBondMsg.Instrument.InstId = null;
+                    mFiFwdBondMsg.Instrument.SavedType = "I";
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.BizDayAdjust = "U";
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.BizDayConv = this.xceBizDayConv.Initialize();
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.EntryMethod = "D";
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.DateRoll = "FWD";
+                    mFiFwdBondMsg.FiFwdSchedule.FiSchedule.StubMethod = "A";
+                    mFiFwdBondMsg.FiFwdSchedule.SettleDateInfo.BizDayConv = this.xceSettleBizConv.Initialize();
+                    mFiFwdBondMsg.Position.BuySell = this.xceBuySell.Initialize();
+                    mFiFwdBondMsg.Position.NotionCcy = "USD";
+                    break;
+
+                case OperationMode.Edit:
+                case OperationMode.NewTemplate:
+                case OperationMode.SaveAs:
+                case OperationMode.SaveAsTemplate:
+                    GenerateOption();
+                    break;
+            }
+
+            // 템플릿 관련 기본 처리
+            if (mFiFwdBondMsg.Instrument.SavedType.Equals("T") || this.OperationMode == OperationMode.NewTemplate) {
+                Tuple<string, string> tuple = Util.AdjustDateTodayBase(mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.EffectDate, mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.ExpiryDate);
+                mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.EffectDate = tuple.Item1;
+                mFiFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.ExpiryDate = tuple.Item2;
+                mFiFwdBondMsg.Instrument.SavedType = "T";
+                this.btnGenerate.Visibility = Visibility.Hidden;
+            }
+        }
+
+        #endregion
+
+
+        #region Method - SSP
+
+        public override void Receive(uint svcNum, EntityBase entity)
+        {
+            if (svcNum == 6213) {   // LoadFiFwdBond
+                this.Dispatcher.Invoke(new SspResponseDelegate(Receive_6213), DispatcherPriority.Normal, entity);
+            } else if (svcNum == 6214) {    // SaveFiFwdBond
+                this.Dispatcher.Invoke(new SspResponseDelegate(Receive_6214), DispatcherPriority.Normal, entity);
+            } else if (svcNum == 6211) {    // GetBondRegInfo
+                this.Dispatcher.Invoke(new SspResponseDelegate(Receive_6211), DispatcherPriority.Normal, entity);
+            }
+        }
+
+        public override void ReceiveError(uint svcNum, SysReject error)
+        {
+            base.ReceiveError(svcNum, error);
+            FiFwdBondMsg mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.EntryMethod = backupEntryMethod;
+            mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.GenCond = backupGenCond;
+        }
+
+        private void Receive_6211(EntityBase entity)
+        {
+            UnderInstMsg mUnderInst = entity as UnderInstMsg;
+            if (mUnderInst == null || mUnderInst.UnderInstRegInfo == null || mUnderInst.UnderInstRegInfo.UnderInst == null || mUnderInst.UnderInstRegInfo.UnderInst.BondSubData == null) {
+                return;
+            }
+
+            FiFwdBondMsg mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            if (mFwdBondMsg == null) {
+                return;
+            }
+
+            foreach (var dateItem in mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.DirectEntryDate) {
+                foreach (var dateItem2 in mUnderInst.UnderInstRegInfo.UnderInst.BondSubData.DirectEntryDate) {
+                    if (dateItem.PeriodNo == dateItem2.PeriodNo) {
+                        if (dateItem.StartDate != dateItem2.StartDate || dateItem.EndDate != dateItem2.EndDate) {
+                            AlertBox.ShowInfo(Util.GetText("채권 정보가 변경되었습니다. 채권을 다시 선택해주세요.", "The bond information has been changed. Please select the bond again."));
+                            return;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (mFwdBondMsg.FiFwdBondInfo.FixedCpnSpec.FixedRate != mUnderInst.UnderInstRegInfo.UnderInst.BondSubData.SurfaceRate) {
+                AlertBox.ShowInfo(Util.GetText("채권 정보가 변경되었습니다. 채권을 다시 선택해주세요.", "The bond information has been changed. Please select the bond again."));
+                return;
+            }
+
+            if (mFwdBondMsg.FiFwdBondInfo.FixedCpnSpec.DayCntConv != mUnderInst.UnderInstRegInfo.UnderInst.DayCntConv) {
+                AlertBox.ShowInfo(Util.GetText("채권 정보가 변경되었습니다. 채권을 다시 선택해주세요.", "The bond information has been changed. Please select the bond again."));
+                return;
+            }
+
+            base.requestClientArea = (new SspAccess()).SendMessage<FiFwdBondMsg>(6214, mFwdBondMsg, typeof(FiFwdBondMsg), this);
+        }
+
+        private void Receive_6213(EntityBase entity)
+        {
+            this.DataContext = entity;
+        }
+
+        private void Receive_6214(EntityBase entity)
+        {
+            FiFwdBondMsg mFwdBndMsg = this.DataContext as FiFwdBondMsg;
+            if (mFwdBndMsg == null) {
+                return;
+            }
+
+            #region - UPI Reference
+            if (m_bIsUPIGenerateCall) {
+                foreach (TabItem item in this.tcMain.Items) {
+                    if (item.Content is PROD_UPIREF_SUB) {
+                        var upiSub = item.Content as PROD_UPIREF_SUB;
+                        upiSub.GenerateReceive((entity as FiFwdBondMsg).Instrument, mFwdBndMsg.Instrument);
+                        if (upiSub.IsGenerating) {
+                            return;
+                        }
+                    }
+                }
+            }
+            #endregion - UPI Reference
+
+            mFwdBndMsg.Instrument.ProdInfo = (entity as FiFwdBondMsg).Instrument.ProdInfo;
+            // Correction Step 추가
+            if (mFwdBndMsg.Instrument.CorrectionYN != null) {
+                if (this.OperationMode == OperationMode.Edit) {
+                    if (this.SaveCorrectionWorkFlow(mFwdBndMsg.Instrument) == false) {
+                        return;
+                    }
+                }
+            }
+            this.DataContext = entity as FiFwdBondMsg;
+            this.HostWindow.Tag = true;
+            this.HostWindow.Close();
+        }
+
+        #endregion
+
+
+        #region Method
+
+        private void GenerateOption()
+        {
+            FiFwdBondMsg mFiFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            if (mFiFwdBondMsg == null) {
+                return;
+            }
+            Util.InitializeEntity(mFiFwdBondMsg);
+
+            //SettleSect
+            //P = 실물인수도
+            //C = 현금결제
+
+            // 기존 Sub탭 화면 Clear
+            for (int i = 1; i < this.tcMain.Items.Count; i++) { // 0은 메인 탭
+                (this.tcMain.Items[i] as TabItem).Content = null;
+            }
+
+            int iTabIndex = 1; // 0은 메인 탭
+
+            FWD_BND_SUB_NewEdit subBndTab = new FWD_BND_SUB_NewEdit(mFiFwdBondMsg.FwdBondSpec, mFiFwdBondMsg.FiFwdBondInfo, mFiFwdBondMsg.Position) {
+                Tag = new TagEx("subBndTab") { Tag = this.tcMain.Items[iTabIndex] },
+                InstProfile = this.InstProfile,
+                //m_sSettleSect = mFiFwdBondMsg.FiFwdSchedule.SettleSect 
+                // 통화가 다른 상품에 대한 개발이 완료될 때까지 임시로 현금결제인 경우 통화를 변경하지 못하도록 임시 처리
+                // ktkim 검사 231117 > 위의 주석 해제 하려면 통화가 다른 상품 개발이 서버에서 필요함 (231117 아직 없음)
+            };
+
+            (this.tcMain.Items[iTabIndex] as TabItem).Header = "Bond Forward";
+            (this.tcMain.Items[iTabIndex] as TabItem).Content = subBndTab;
+            (this.tcMain.Items[iTabIndex] as TabItem).Visibility = Visibility.Visible;
+
+            iTabIndex++;
+
+            FI_FWD_PERIOD subPeriodTab = new FI_FWD_PERIOD(mFiFwdBondMsg.Instrument, mFiFwdBondMsg.FiFwdBondInfo.IrSchedule, mFiFwdBondMsg.FwdBondSpec, mFiFwdBondMsg.FiFwdBondInfo) {
+                Tag = new TagEx("subPeriodTab") { Tag = this.tcMain.Items[iTabIndex] },
+                InstProfile = this.InstProfile
+            };
+            (this.tcMain.Items[iTabIndex] as TabItem).Header = "Bond : Period";
+            (this.tcMain.Items[iTabIndex] as TabItem).Content = subPeriodTab;
+            (this.tcMain.Items[iTabIndex] as TabItem).Visibility = Visibility.Visible;
+
+            iTabIndex++;
+
+            FWD_FIX_SUB_NewEdit subFixTab = new FWD_FIX_SUB_NewEdit(mFiFwdBondMsg) {
+                Tag = new TagEx("subFixTab") { Tag = this.tcMain.Items[iTabIndex] },
+                InstProfile = this.InstProfile
+            };
+            (this.tcMain.Items[iTabIndex] as TabItem).Header = mFiFwdBondMsg.FiFwdBondType == "IC" ? "Bond : Inflation Linked Fixed" : "Bond : Fixed";
+            (this.tcMain.Items[iTabIndex] as TabItem).Content = subFixTab;
+            (this.tcMain.Items[iTabIndex] as TabItem).Visibility = Visibility.Visible;
+
+            iTabIndex++;
+
+            #region - UPI Reference Tab
+            // UPI Reference Tab 오픈
+            if (Global.GetCustomSetup("TRYN") == "Y") {
+                if (this.InstItem.ProductSect == "T" || this.InstItem.ProductSect == "P") {
+                    PROD_UPIREF_SUB subUpi = new PROD_UPIREF_SUB(() => { Save(btnSave, null, true); }, mFiFwdBondMsg.Instrument) {
+                        Tag = new TagEx("subUpi") { Tag = this.tcMain.Items[iTabIndex] },
+                        InstProfile = this.InstProfile,
+                        OperationMode = this.OperationMode
+                    };
+                    (this.tcMain.Items[iTabIndex] as TabItem).Header = "UPI Reference";
+                    (this.tcMain.Items[iTabIndex] as TabItem).Content = subUpi;
+                    (this.tcMain.Items[iTabIndex] as TabItem).Visibility = Visibility.Visible;
+                }
+            }
+            #endregion - UPI Reference Tab
+
+            #region - Add Spec. Tab
+            // Add Spec. Tab 오픈
+            bool bIsIn = false;
+            foreach (TabItem tab in this.tcMain.Items) {
+                if (tab.Header as string == "Additional Spec.") {
+                    bIsIn = true;
+                    break;
+                }
+            }
+            if (bIsIn == false) {
+                TabItem tabAddSpec = new TabItem();
+                tabAddSpec.Name = "tabItem" + (tcMain.Items.Count + 1);
+                tabAddSpec.SetResourceReference(TemplateProperty, "TsNeMainTiTemplate");
+                tabAddSpec.Header = "Additional Spec.";
+                tabAddSpec.Content = new PROD_ADD_SPEC(mFiFwdBondMsg.Instrument);
+                this.RegisterName(tabAddSpec.Name, tabAddSpec);
+                this.tcMain.Items.Add(tabAddSpec);
+            }
+
+            #endregion - Add Spec. Tab
+
+            // Correction Step 추가
+            if (CorrectionType != null) {
+                this.AddCorrectionTab(this.tcMain, mFiFwdBondMsg.Instrument, mFiFwdBondMsg.FiFwdBondInfo.IrSchedule.InstPeriod);
+            }
+
+            Animation.TabControlAnimation(this, this.tcMain.Items);
+
+            this.SettleSectSetting();
+        }
+
+        private string backupEntryMethod = null;
+        private SeriesPeriodGenCond backupGenCond = null;
+        private void Save(object sender, RoutedEventArgs e, bool p_bIsUPIOpenCall)
+        {
+            if (this.PreviewSaveClick != null) {
+                this.PreviewSaveClick(sender, e);
+            }
+
+            FiFwdBondMsg mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            if (mFwdBondMsg == null) {
+                return;
+            }
+
+            var tab1 = tabItem1.Content as ITS.Symphony.UI.PR.FI.NTS.FWD_BND_SUB_NewEdit;
+            if (tab1.IsValidBond() == false) {
+                AlertBox.ShowInfo(Util.GetText("채권을 선택하세요.", "Please select the bond."));
+                return;
+            }
+            if (tab1.IsValidForward() == false) {
+                AlertBox.ShowInfo(Util.GetText("Forward Price 정보를 입력하세요.", "Please enter Forward Price information."));
+                return;
+            }
+            // 기존 상품에서 Notional Ccy != Bond Ccy
+            string sNotionCcy = "";
+            if (string.IsNullOrEmpty(sNotionCcy) != false){
+                sNotionCcy = xceNotionCcy.Value as string;
+            }
+            if (tab1.isSameNotionalANdBondCcy(sNotionCcy) == false) {
+                AlertBox.ShowInfo(Util.GetText("상품의 통화와 채권의 통화는 다를 수 없습니다.\n채권을 다시 선택해주세요.", "Bond currency should be same as notional currency.\nPlease select the bond again"));
+                return;
+            }
+
+            // 기존 상품에서 현금결제일 때 Notional Ccy != Forward Price CCy
+            if (xceSettleSect.Value as string == "C") {
+                if (tab1.isSameNotionalANdForwardCcy(sNotionCcy) == false) {
+                    AlertBox.ShowInfo(Util.GetText("현금결제일 때 채권의 통화와 Forward Price의 통화는 다를 수 없습니다.\n채권을 다시 선택해주세요.", "If Settlement is Cash Settlement,\nBond currency should be same as Forward price currency.\nPlease select the bond again"));
+                    return;
+                }
+            }
+
+            var tab2 = tabItem2.Content as ITS.Symphony.UI.PR.Common.Controls.FI_FWD_PERIOD;
+            if (tab2.IsSameBondMaturAndLastCpnEndDate() == false) {
+                AlertBox.ShowInfo(Util.GetText("채권 만기일과 마지막 구간 EndDate 값이 다릅니다.", "Bond Maturity should be same as Last Period of EndDate."));
+                return;
+            }
+
+            if (tab2.IsValidLastPayDate() == false) {
+                AlertBox.ShowInfo(Util.GetText("마지막 구간 지급일을 입력해주세요.", "Please enter Last Period of Payment Date."));
+                return;
+            }
+
+            var couponTermMsg = mFwdBondMsg.FiFwdBondInfo.IrSchedule as IrSchedule;
+            if (PRUtil.CheckFICouponTerm(couponTermMsg) < 0) {
+                return;
+            }
+
+            if ((OperationMode == OperationMode.NewBlank || OperationMode == OperationMode.SaveAs) && InstItem.ProductSect == "P") {
+                // Product New, SaveAs, Save As New Category에서 저장하는 경우 LinkedYN을 false로 전송 추가
+                mFwdBondMsg.Instrument.LinkedYN = false;
+            }
+
+            backupEntryMethod = mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.EntryMethod;
+            backupGenCond = mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.GenCond;
+            mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.EntryMethod = mFwdBondMsg.FiFwdBondInfo.IrSchedule.BasePeriod.EntryMethod;
+            mFwdBondMsg.FiFwdBondInfo.IrSchedule.CpnPeriod.GenCond = mFwdBondMsg.FiFwdBondInfo.IrSchedule.BasePeriod.GenCond;
+
+            #region - UPI Reference
+            if (p_bIsUPIOpenCall) {
+                // UPI Reference 에서 함수를 호출한 경우 SaveType를 G로 설정해야한다.
+                mFwdBondMsg.Instrument.SavedType = "G";
+                m_bIsUPIGenerateCall = true;
+            } else {
+                foreach (TabItem item in this.tcMain.Items) {
+                    if (item.Content is PROD_UPIREF_SUB) {
+                        var upiSub = item.Content as PROD_UPIREF_SUB;
+                        upiSub.SetUPIInstrument(mFwdBondMsg.Instrument);
+                        break;
+                    }
+                }
+            }
+            #endregion - UPI Reference
+
+            #region Additional Spec
+
+            foreach (TabItem item in this.tcMain.Items) {
+                if (item.Content is PROD_ADD_SPEC) {
+                    var ucProdAddSpec = item.Content as PROD_ADD_SPEC;
+                    if (ucProdAddSpec.CheckAddSpecData() == false) {
+                        
+                        return;
+                    }
+                    ucProdAddSpec.SetAddSpecInstrument(mFwdBondMsg.Instrument);
+                    break;
+                }
+            }
+
+            #endregion
+
+            // 상품 메시지에 세팅된 채권 데이터의 값과 기초자산에 저장된 결과 확인
+            // 채권 기초자산 데이터를 불러온 이후 채권 기초자산의 데이터가 변경된 내용을 확인하기 위한 처리.
+            // Instrument의 경우 테스트를 할 수 있으며, Template의 경우에는 틀을 만들기 위한 처리이므로 바로 상품을 저장 처리함. Product는 채권 정보 확인 후 상품 저장
+            if (InstProfile.instItem.ProductSect == "P") {
+                base.ScreenLock();
+                base.requestClientArea = (new SspAccess()).SendMessage<UnderSearchIn>(6211, new UnderSearchIn() { UnderCd = mFwdBondMsg.FwdBondSpec.BondUnder.BondUnderItem.Code }, typeof(UnderInstMsg), this);
+            } else {
+                base.requestClientArea = (new SspAccess()).SendMessage<FiFwdBondMsg>(6214, mFwdBondMsg, typeof(FiFwdBondMsg), this);
+            }
+        }
+
+        public override TMsg GetMessageEntity<TMsg>(TMsg msgEntity)
+        {
+            if (msgEntity is FiFwdBondMsg) {
+                // FI_FWD_BFD 관련 메시지 개체를 얻기 위한 코드
+                return (TMsg)this.DataContext;
+            } else if (msgEntity is Instrument) {
+                // Pricer Main Operation을 위한 메시지 개체
+                return (TMsg)((this.DataContext as FiFwdBondMsg).Instrument as object);
+            } else {
+                return default(TMsg);
+            }
+        }
+
+        private FWD_BND_SUB_NewEdit GetFwdBndTab()
+        {
+            foreach (TabItem item in this.tcMain.Items) {
+                if (item.Content is FWD_BND_SUB_NewEdit) {
+                    return item.Content as FWD_BND_SUB_NewEdit;
+                }
+            }
+            return null;
+        }
+
+        #endregion
+
+        #region Event Handler
+
+        private void SettleSectSetting()
+        {
+            if (xceSettleSect.Value as string == "C") {
+                //현금결제
+                if (tabItem1 != null) {
+                    var tab1 = tabItem1.Content as ITS.Symphony.UI.PR.FI.NTS.FWD_BND_SUB_NewEdit;
+                    if (tab1 != null) {
+                        tab1.DisableForwardPrice(xceNotionCcy.Value as string);
+                    }
+                }
+            } else if (xceSettleSect.Value as string == "P") {
+                //실물인수도
+                if (tabItem1 != null) {
+                    var tab1 = tabItem1.Content as ITS.Symphony.UI.PR.FI.NTS.FWD_BND_SUB_NewEdit;
+                    if (tab1 != null) {
+                        tab1.EnableForwardPrice();
+                    }
+                }
+            } else {
+                return;
+            }
+        }
+
+        // Settlement 바꾸면 발생하는 이벤트
+        private void xceSettleSect_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.SettleSectSetting();
+        }
+
+        // 해당 함수는 NotionCcy의 변경을 감지한다.
+        // 처음 창을 띄울 때도 한번 실행하는데 이 때는 실행하지 않는다.
+        // (의도는 값을 변경할 때 초기화인데, 처음 창을 띄울 때는 변경이 아니기 때문이다.)
+        private bool firststart = true;
+        private void xceNotionCcy_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (firststart == true) {
+                firststart = false;
+            } else {
+                // 값의 변경 발생
+                if (xceNotionCcy == null) {
+                    return;
+                }
+                string NotionalCcy = xceNotionCcy.Value.ToString();
+                if (tabItem1 != null) {
+                    var tab1 = tabItem1.Content as ITS.Symphony.UI.PR.FI.NTS.FWD_BND_SUB_NewEdit;
+                    if (tab1 != null) {
+                        tab1.ResetBondInfo(NotionalCcy);
+                    }
+                }
+            }
+            var mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            if (mFwdBondMsg == null || mFwdBondMsg.Position == null || !mFwdBondMsg.Position.NotionAmt.HasValue || mFwdBondMsg.FwdBondSpec == null) {
+                return;
+            }
+
+            FWD_BND_SUB_NewEdit bndSubTab = GetFwdBndTab();
+            if (bndSubTab != null) {
+                bndSubTab.GenerateFwdPriceArea();
+            }
+        }
+
+        private void ineNotionAmt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+            if (mFwdBondMsg == null || mFwdBondMsg.Position == null || !mFwdBondMsg.Position.NotionAmt.HasValue || mFwdBondMsg.FwdBondSpec == null) {
+                return;
+            }
+
+            FWD_BND_SUB_NewEdit bndSubTab = GetFwdBndTab();
+            if (bndSubTab != null) {
+                bndSubTab.AutoCalcFwdPrice();
+            }
+        }
+
+        private void btnPeriodHoliday_Click(object sender, RoutedEventArgs e)
+        {
+            var ucCalendarSearch = new UC_CalendarSearch() { IsMultiSelect = true };
+            if ((new HostWindow(ucCalendarSearch, this).ShowDialog() == true) && (ucCalendarSearch.SelectedCalendarAppList.Count > 0)) {
+                var mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+                if (mFwdBondMsg == null) {
+                    return;
+                }
+
+                var maHoliday = new ObservableCollection<Holiday>();
+                foreach (CalendarAppList mItem in ucCalendarSearch.SelectedCalendarAppList) {
+                    maHoliday.Add(new Holiday() { Code = mItem.Code, Name = mItem.Name });
+                }
+
+                mFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.Holiday.Clear();
+                mFwdBondMsg.FiFwdSchedule.FiSchedule.InstPeriod.Holiday = maHoliday;
+            }
+        }
+
+        private void btnSettleHoliday_Click(object sender, RoutedEventArgs e)
+        {
+            UC_CalendarSearch ucCalendarSearch = new UC_CalendarSearch() { IsMultiSelect = true };
+            if ((new HostWindow(ucCalendarSearch, this).ShowDialog() == true) && (ucCalendarSearch.SelectedCalendarAppList.Count > 0)) {
+                var mFwdBondMsg = this.DataContext as FiFwdBondMsg;
+                if (mFwdBondMsg == null) {
+                    return;
+                }
+
+                var maHoliday = new ObservableCollection<Holiday>();
+                foreach (CalendarAppList mItem in ucCalendarSearch.SelectedCalendarAppList) {
+                    maHoliday.Add(new Holiday() { Code = mItem.Code, Name = mItem.Name });
+                }
+
+                mFwdBondMsg.FiFwdSchedule.SettleDateInfo.Holiday.Clear();
+                mFwdBondMsg.FiFwdSchedule.SettleDateInfo.Holiday = maHoliday;
+            }
+        }
+
+        private void btnGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateOption();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Save(sender, e, false);
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.HostWindow.Tag = false;
+            this.HostWindow.Close();
+        }
+
+        #endregion
+    }
+}

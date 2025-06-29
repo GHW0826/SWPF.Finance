@@ -1,0 +1,34 @@
+﻿<base:WindowBase x:Class="SWPF.Finance.Product.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SWPF.Finance.Product"
+        xmlns:base="clr-namespace:SWPF.Common.Base;assembly=SWPF.Common"
+        xmlns:controls="clr-namespace:SWPF.Common.Controls;assembly=SWPF.Common"       
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        Title="Product" Height="450" Width="800">
+    <Grid>
+        <controls:SSRibbon>
+            <RibbonTab Header="Product">
+                <RibbonGroup Header="Product">
+                    <RibbonButton Label="New"/>
+                    <RibbonButton Label="Open"/>
+                    <RibbonButton Label="Edit"/>
+                    <RibbonButton Label="Save As"/>
+                </RibbonGroup>
+            </RibbonTab>
+
+            <RibbonTab Header="Template">
+                <RibbonGroup Header="Template">
+                    <RibbonButton Label="New" Command="{Binding TemplateNewCommand}"/>
+                    <RibbonButton Label="Open"/>
+                    <RibbonButton Label="Edit"/>
+                    <RibbonButton Label="Save As"/>
+                </RibbonGroup>
+            </RibbonTab>
+        </controls:SSRibbon>
+    </Grid>
+</base:WindowBase>

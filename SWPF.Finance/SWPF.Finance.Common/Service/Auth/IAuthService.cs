@@ -1,8 +1,4 @@
-﻿using SWPF.Finance.MAIN.Dto.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SWPF.Finance.Common.Contracts.Auth;
 using System.Threading.Tasks;
 
 namespace SWPF.Finance.Common.Service.Auth
