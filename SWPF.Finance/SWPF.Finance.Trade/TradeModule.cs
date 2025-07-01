@@ -1,6 +1,7 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using SWPF.Finance.Trade.ViewModels;
 
 namespace SWPF.Finance.Trade
 {
@@ -15,6 +16,7 @@ namespace SWPF.Finance.Trade
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
     }
 }

@@ -2,7 +2,7 @@
 using Prism.Modularity;
 using Prism.Regions;
 using SWPF.Finance.Product.FI;
-using SWPF.Finance.Product.ViewModels;
+using SWPF.Finance.Product.FI.ViewModels;
 
 namespace SWPF.Finance.Product
 {

@@ -1,12 +1,192 @@
-﻿<Window x:Class="SWPF.Finance.Trade.MainWindow"
+﻿<base:WindowBase x:Class="SWPF.Finance.Trade.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SWPF.Finance.Trade"
+        xmlns:base="clr-namespace:SWPF.Common.Base;assembly=SWPF.Common"
+        xmlns:controls="clr-namespace:SWPF.Common.Controls;assembly=SWPF.Common"       
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="Trade" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
-</Window>
+    <DockPanel>
+        <!-- 상단 Ribbon -->
+        <controls:SSRibbon DockPanel.Dock="Top">
+            <RibbonTab Header="Product">
+                <RibbonGroup Header="Product">
+                    <RibbonButton Label="New"/>
+                    <RibbonButton Label="Open"/>
+                    <RibbonButton Label="Edit"/>
+                    <RibbonButton Label="Save As"/>
+                </RibbonGroup>
+            </RibbonTab>
+
+            <RibbonTab Header="Template">
+                <RibbonGroup Header="Template">
+                    <RibbonButton Label="New" Command="{Binding TemplateNewCommand}"/>
+                    <RibbonButton Label="Open"/>
+                    <RibbonButton Label="Edit"/>
+                    <RibbonButton Label="Save As"/>
+                </RibbonGroup>
+            </RibbonTab>
+        </controls:SSRibbon>
+
+        <!-- 본문 Layout -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <!-- 좌측 패널 -->
+                <ColumnDefinition Width="*"/>
+                <!-- 메인 차트 -->
+                <ColumnDefinition Width="250"/>
+                <!-- 우측 패널 -->
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- 차트 영역 -->
+                <RowDefinition Height="180"/>
+                <!-- 하단 보조 지표 -->
+            </Grid.RowDefinitions>
+            <!-- 좌측: 거래소 탭 + 상단 버튼 + 검색 + Ticker 리스트 -->
+            <StackPanel Grid.Column="0" Grid.RowSpan="2" Margin="5">
+
+                <!-- 거래소 선택 탭 + 우측 버튼들 -->
+                <DockPanel LastChildFill="True">
+                    <!-- 오른쪽: Refresh / Settings 버튼 -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,0,5">
+                        <Button Content="🔄" Width="30" Height="25" Margin="0,0,5,0" Command="{Binding RefreshCommand}" />
+                        <Button Content="⚙" Width="30" Height="25" Command="{Binding OpenSettingsCommand}" />
+                    </StackPanel>
+
+                    <!-- 왼쪽: 거래소 탭 -->
+                    <TabControl Width="140" SelectedIndex="{Binding SelectedExchangeIndex}" Margin="0,0,5,0">
+                        <TabItem Header="Upbit"/>
+                        <TabItem Header="Binance"/>
+                    </TabControl>
+                </DockPanel>
+
+                <!-- 검색 -->
+                <TextBox Margin="0,0,0,5" Height="25" Text="{Binding SearchText}" />
+
+                <!-- Ticker 리스트 -->
+                <ListBox ItemsSource="{Binding TickerList}" SelectedItem="{Binding SelectedTicker}" />
+            </StackPanel>
+            
+
+            <!-- 중앙: Candle 차트 -->
+            <Border Grid.Column="1" Grid.Row="0" Margin="5" BorderBrush="Black" BorderThickness="1">
+                <!-- <TextBlock Text="Ticker / Candle 차트" HorizontalAlignment="Center" VerticalAlignment="Center" /> -->
+                <!-- 중앙 차트 -->
+                <lvc:CartesianChart x:Name="CryptoChart" Grid.Column="1" Grid.Row="0" 
+                     Series="{Binding Series}">
+                    <!--
+                     MouseWheel="CryptoChart_MouseWheel"
+                     MouseDown="CryptoChart_MouseDown"
+                     MouseMove="CryptoChart_MouseMove"
+                     MouseUp="CryptoChart_MouseUp"
+                     LostMouseCapture="CryptoChart_LostMouseCapture"
+                    -->
+                </lvc:CartesianChart>
+            </Border>
+
+            <!-- 하단: 서브 지표 -->
+            <Border Grid.Column="1" Grid.Row="1" Margin="5" BorderBrush="Gray" BorderThickness="1">
+                <TextBlock Text="보조 지표 영역 (MACD, RSI 등)" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <!-- 우측 상단: 호가창 -->
+            <Border Grid.Column="2" Grid.Row="0" Margin="5" BorderBrush="Black" BorderThickness="1">
+                <DataGrid ItemsSource="{Binding HogaRows}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  RowHeight="28"
+                  FontWeight="Bold"
+                  FontSize="12"
+                  GridLinesVisibility="None"
+                  IsReadOnly="True"
+                  BorderThickness="0">
+                    <DataGrid.Columns>
+
+                        <!-- 매도건수 -->
+                        <DataGridTemplateColumn Header="건수">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Border Background="#332196F3"
+                                        Width="{Binding AskCountBarWidth}"
+                                        HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding AskCount}"
+                                           HorizontalAlignment="Right"
+                                           Foreground="Blue"
+                                           Padding="5,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 매도수량 -->
+                        <DataGridTemplateColumn Header="잔량">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Border Background="#33FFD700"
+                                        Width="{Binding AskVolumeBarWidth}"
+                                        HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding AskVolume}"
+                                           HorizontalAlignment="Right"
+                                           Foreground="Blue"
+                                           Padding="5,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 매수건수 -->
+                        <DataGridTemplateColumn Header="건수">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Border Background="#33FF5C5C"
+                                        Width="{Binding BidCountBarWidth}"
+                                        HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding BidCount}"
+                                           HorizontalAlignment="Right"
+                                           Foreground="Red"
+                                           Padding="5,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 매수수량 -->
+                        <DataGridTemplateColumn Header="잔량">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Border Background="#33FFB6C1"
+                                        Width="{Binding BidVolumeBarWidth}"
+                                        HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding BidVolume}"
+                                           HorizontalAlignment="Right"
+                                           Foreground="Red"
+                                           Padding="5,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!-- <TextBlock Text="호가창" HorizontalAlignment="Center" VerticalAlignment="Center" /> -->
+            </Border>
+
+            <!-- 우측 하단: 남겨두기 -->
+            <Border Grid.Column="2" Grid.Row="1" Margin="5" BorderBrush="Black" BorderThickness="1">
+                <TextBlock Text="남겨두기" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+    </DockPanel>
+</base:WindowBase>

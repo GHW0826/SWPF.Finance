@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using Prism.Services.Dialogs;
-using SWPF.Finance.Product.FI;
 using System.Windows.Input;
 
-namespace SWPF.Finance.Product.ViewModels
+namespace SWPF.Finance.Product.FI.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
